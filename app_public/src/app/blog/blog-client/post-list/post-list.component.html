@@ -1,0 +1,24 @@
+<mat-card>
+  <div class="mat-elevation-z8">
+    <mat-table [dataSource]="dataSource" >
+      <!-- Position Column -->
+      <ng-container matColumnDef="title">
+        <mat-header-cell *matHeaderCellDef class="list-title"> title </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="list-title"> {{element.title}} </mat-cell>
+      </ng-container>
+      <!-- Name Column -->
+      <ng-container matColumnDef="viewcount">
+        <mat-header-cell *matHeaderCellDef > viewcount </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.viewcount}} </mat-cell>
+      </ng-container>
+      <!-- Weight Column -->
+      <ng-container matColumnDef="createdOn">
+        <mat-header-cell *matHeaderCellDef> createdOn </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.createdOn}} </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;" ></mat-row>
+    </mat-table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  </div>
+</mat-card>

@@ -1,0 +1,35 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row fxLayoutGap="10px">
+    <span>
+      <a routerLink="" class="link">Philson</a>
+    </span>
+    <span>
+      <a routerLink="/blog" class="link">Blog</a>
+    </span>
+    <span fxFlex="100%"></span>
+    <span>
+      <a routerLink="/login" class="link" *ngIf="!isLoggedIn()">Sign in</a>
+    </span>
+    
+  </mat-toolbar-row>
+</mat-toolbar>
+<div fxLayout="column" fxLayoutGap="20px">
+  <mat-sidenav-container>
+    <mat-sidenav #sidenav>
+      <app-side-nav></app-side-nav>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <mat-toolbar class="toolbar">
+          <mat-toolbar-row fxLayout="row" class="app-header bright-font">
+            <button mat-icon-button (click)="sidenav.toggle()">
+              <mat-icon>search</mat-icon>
+            </button>
+            <span>Product Review</span>
+            <span fxFlex="100%"></span>
+            <span>Blog</span>
+          </mat-toolbar-row>
+        </mat-toolbar>
+        <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

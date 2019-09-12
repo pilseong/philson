@@ -1,0 +1,15 @@
+table {
+  width: 100%;
+}
+
+.list-title {
+  flex: 4
+}
+
+mat-header-row {
+  min-height: 2rem
+}
+
+mat-row {
+  min-height: 2rem
+}

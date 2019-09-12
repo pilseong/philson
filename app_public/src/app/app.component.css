@@ -1,0 +1,21 @@
+table {
+  width: 100%;
+}
+
+.app-header {
+  background-color: #378fe7;
+  padding: 5px 10px 5px 0
+}
+
+a.link {
+  color: white;
+}
+
+a.link:hover {
+  color: black;
+  text-decoration: none;
+}
+
+.bright-font {
+  color: white
+}
