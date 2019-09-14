@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ContentViewerComponent implements OnInit {
 
-  markdown: string = `assets/test.md`
+  markdown: string = 'assets/test.md'
   constructor() { }
 
   ngOnInit() {

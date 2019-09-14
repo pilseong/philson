@@ -1,26 +1,26 @@
 <div class="container">
   <mat-card>
-    <p class="lead">Not a member? Please <a routerLink="/register">register</a> first</p>
+    <p class="lead">Not a member? Please 
+      <a routerLink="/register">register</a> first
+    </p>
     <form (submit)="onLoginSubmit()">
-      <div role="alert" class="alert alert-danger" *ngIf="formErrors">{{formErrors}}</div>
-      <div class="row form-group">
-        <label for="email">Enter email address</label>
-        <input type="text"
+      <div role="alert" class="alert alert-danger" *ngIf="formErrors">{{formErrors}}></div>
+      <mat-form-field>
+        <input matInput type="text"
               [(ngModel)]="credentials.email"
               class="form-control" 
               id="email"
               name="email"
-              placeholder="Enter your email">
-      </div>
-      <div class="row form-group">
-          <label for="password">Enter new password</label>
-          <input type="text"
+              placeholder="Enter email address">
+      </mat-form-field>   
+      <mat-form-field>
+          <input matInput type="text"
                 [(ngModel)]="credentials.password"
                 class="form-control" 
                 id="password"
                 name="password"
                 placeholder="e.g 12+ alphanumerics">
-      </div>
+      </mat-form-field>              
       <button type="submit" role="button" class="btn btn-primary">Sign in!</button>
     </form>
   </mat-card>
