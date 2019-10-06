@@ -1,18 +1,26 @@
 <div class="container">
   <mat-card>
-    <p class="mat-display-1">Not a member? Please 
-      <a routerLink="/register">register</a> first
+    <p class="mat-display-1">Already a member? Please
+      <a routerLink="/login">Log in</a> Instead
     </p>
-    <form (submit)="onLoginSubmit()" fxLayout="column" fxLayoutAlign="center">
+    <form (submit)="onRegisterSubmit()" fxLayout="column" fxLayoutAlign="center">
       <div role="alert" class="alert alert-danger" *ngIf="formErrors">{{formErrors}}</div>
+      <mat-form-field class="col-12 col-md-8">
+        <input matInput type="text" 
+              [(ngModel)]="credentials.name"
+              class="form-control" 
+              id="name"
+              name="name"
+              placeholder="Enter your name">
+      </mat-form-field>
       <mat-form-field class="col-12 col-md-8">
         <input matInput type="text"
               [(ngModel)]="credentials.email"
               class="form-control" 
               id="email"
               name="email"
-              placeholder="Enter email address">
-      </mat-form-field>   
+              placeholder="Enter your email">
+      </mat-form-field>        
       <mat-form-field class="col-12 col-md-8">
           <input matInput type="text"
                 [(ngModel)]="credentials.password"
@@ -21,7 +29,7 @@
                 name="password"
                 placeholder="e.g 12+ alphanumerics">
       </mat-form-field>
-      <button type="submit" role="button" class="btn btn-primary col-12 col-sm-2">Sign in!</button>
+      <button type="submit" role="button" class="btn btn-primary col-12 col-sm-2">Register!</button>
     </form>
   </mat-card>
 </div>

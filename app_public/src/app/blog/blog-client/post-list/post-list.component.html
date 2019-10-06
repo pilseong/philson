@@ -4,17 +4,18 @@
       <!-- Position Column -->
       <ng-container matColumnDef="title">
         <mat-header-cell *matHeaderCellDef class="list-title"> title </mat-header-cell>
-        <mat-cell *matCellDef="let element" class="list-title"> {{element.title}} </mat-cell>
+        <mat-cell *matCellDef="let element" class="list-title">
+          <a routerLink="{{ element._id }}">{{element.title}}</a></mat-cell>
       </ng-container>
       <!-- Name Column -->
       <ng-container matColumnDef="viewcount">
         <mat-header-cell *matHeaderCellDef > viewcount </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{element.viewcount}} </mat-cell>
+        <mat-cell *matCellDef="let element"> {{element.count}} </mat-cell>
       </ng-container>
       <!-- Weight Column -->
       <ng-container matColumnDef="createdOn">
         <mat-header-cell *matHeaderCellDef> createdOn </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{element.createdOn}} </mat-cell>
+        <mat-cell *matCellDef="let element"> {{element.createdOn | date }} </mat-cell>
       </ng-container>
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;" ></mat-row>

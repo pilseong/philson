@@ -21,6 +21,7 @@ export class AccountManagerService {
   }
 
   public register(user: User): Promise<AuthResponse> {
+    console.log("register -- register with "+ JSON.stringify(user))
     return this.makeAuthApiCall('register', user)
   }
 

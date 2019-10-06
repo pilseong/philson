@@ -1,5 +1,24 @@
-<div class="container">
-  <app-post-list></app-post-list>
-  <!-- <app-content-viewer></app-content-viewer> -->
-  <router-outlet></router-outlet>
+<div fxLayout="column" fxLayoutGap="20px">
+  <mat-sidenav-container>
+    <mat-sidenav #sidenav>
+      <app-side-nav [appStatus]="appstatus | lowercase" [categories]="categories$ | async"></app-side-nav>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <mat-toolbar class="toolbar">
+        <mat-toolbar-row fxLayout="row" class="app-header bright-font">
+          <button mat-icon-button (click)="toggleSidebar(sidenav)">
+            <mat-icon>search</mat-icon>
+          </button>
+          <span>Product Review</span>
+          <span fxFlex="100%"></span>
+          <span>{{appstatus}}</span>
+        </mat-toolbar-row>
+      </mat-toolbar>
+      <div class="container">
+        <app-post-list [articleList]="articlelist$ | async"></app-post-list>
+        <!-- <app-content-viewer></app-content-viewer> -->
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
 </div>

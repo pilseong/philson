@@ -16,6 +16,6 @@ a.link:hover {
   text-decoration: none;
 }
 
-.bright-font {
-  color: white
+button:focus {
+  outline: none
 }

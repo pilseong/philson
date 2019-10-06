@@ -1,7 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { SideNavModule } from 'src/app/shared/side-nav/side-nav.module';
 import { MarkdownModule, MarkedOptions } from 'ngx-markdown';
 
 import { AppComponent } from './app.component';
@@ -11,18 +10,19 @@ import { routes } from './app.routing';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { LoginComponent } from './shared/components/login/login.component';
 import { FormsModule } from '@angular/forms';
+import { RegisterComponent } from './shared/components/register/register.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     MaterialModule,
-    SideNavModule,
     FormsModule,
     HttpClientModule,
     MarkdownModule.forRoot({ loader: HttpClient }),

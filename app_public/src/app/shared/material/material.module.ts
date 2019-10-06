@@ -13,6 +13,7 @@ import {
   MatCardModule,
   MatFormFieldModule,
   MatInputModule,
+  MatMenuModule,
 } from '@angular/material'
 
 const modules = [ 
@@ -27,7 +28,8 @@ const modules = [
   MatCardModule,
   FlexLayoutModule,
   MatFormFieldModule,
-  MatInputModule
+  MatInputModule,
+  MatMenuModule
 ]
 
 @NgModule({

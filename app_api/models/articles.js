@@ -1,4 +1,18 @@
 const mongoose = require('mongoose')
+const Schema = mongoose.Schema
+
+const categoriesSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true
+  },
+  order: {
+    type: Number,
+    require: true
+  },
+  parent: {type: Schema.Types.ObjectId, ref: 'Category'},
+  children: [{type: Schema.Types.ObjectId, ref: 'Category'}]
+})
 
 const reviewsSchema = new mongoose.Schema({
   author: {
@@ -15,7 +29,6 @@ const reviewsSchema = new mongoose.Schema({
   }
 })
 
-
 const articlesSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -30,7 +43,7 @@ const articlesSchema = new mongoose.Schema({
     type: String,
     'default': ''
   },
-  categories: [String],
+  categories: { type: Schema.Types.ObjectId, ref: 'Category' },
   tags: [String],
   reviews: [reviewsSchema],
   createdOn: {
@@ -41,3 +54,4 @@ const articlesSchema = new mongoose.Schema({
 
 
 mongoose.model('Article', articlesSchema)
+mongoose.model('Category', categoriesSchema)
