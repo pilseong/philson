@@ -1,0 +1,18 @@
+<h1 mat-dialog-title>Hi {{data.name}}</h1>
+<div mat-dialog-content fxLayout="column">
+  <mat-form-field>
+    <mat-label>Select Category</mat-label>
+    <mat-select [(value)]="data.categories">
+      <mat-option *ngFor="let category of categories$ | async" value="{{ category._id }}">
+        {{ category.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput type="text" [(ngModel)]="data.tags">
+  </mat-form-field>  
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button (click)="onNoClick()">No Thanks</button>
+  <button mat-raised-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
+</div>

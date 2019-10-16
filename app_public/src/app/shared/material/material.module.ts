@@ -14,6 +14,10 @@ import {
   MatFormFieldModule,
   MatInputModule,
   MatMenuModule,
+  MatDialogModule,
+  MatOptionModule,
+  MatSelectModule,
+  MatChipsModule,
 } from '@angular/material'
 
 const modules = [ 
@@ -26,10 +30,14 @@ const modules = [
   MatListModule,
   MatExpansionModule,
   MatCardModule,
+  MatDialogModule,
   FlexLayoutModule,
   MatFormFieldModule,
   MatInputModule,
-  MatMenuModule
+  MatMenuModule,
+  MatSelectModule,
+  MatOptionModule,
+  MatChipsModule
 ]
 
 @NgModule({

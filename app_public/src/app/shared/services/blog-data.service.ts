@@ -20,7 +20,7 @@ export class BlogDataService {
   public addArticle(article: Article): Promise<Article> {
     const url: string = `${this.apiBaseUrl}/blog/articles`
 
-    console.log(this.storage.getItem('philson-token'))
+    // console.log(this.storage.getItem('philson-token'))
     const httpOptions = {
       headers: new HttpHeaders({
         'Authorization': `Bearer ${this.storage.getItem('philson-token')}`
@@ -44,8 +44,8 @@ export class BlogDataService {
     return this.http.get<ArticleList[]>(url)
   }
 
-  public getCategories(currenturl: string): Observable<Category[]> {
-    const url: string = `${this.apiBaseUrl}/blog/categories/${currenturl}?parent=true`
+  public getCategories(currenturl: string, parent:boolean, children: boolean): Observable<Category[]> {
+    const url: string = `${this.apiBaseUrl}/blog/categories/${currenturl}?parent=${parent}&children=${children}`
     console.log("getCategories: " + url)
     return this.http.get<Category[]>(url)
   }

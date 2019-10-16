@@ -1,36 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { Article } from "src/app/shared/types/article";
+import { Component, OnInit, Inject } from '@angular/core';
+import { Article, Category } from "src/app/shared/types/article";
 import { AuthenticationService } from 'src/app/shared/services/authentication.service';
 import { BlogDataService } from 'src/app/shared/services/blog-data.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { Observable } from 'rxjs';
+import { SharedService } from '../shared/services/shared.service';
 
 @Component({
   selector: 'app-content-editor',
-  template: `
-  <mat-card>
-    <form #f="ngForm" (ngSubmit)="onSubmit(f.value)">
-      <div fxLayout="row" fxLayoutAlign="space-between">
-        <mat-form-field class="title">
-          <input matInput placeholder="Title" name="title" ngModel>
-        </mat-form-field>
-        <button class="save_button" 
-                mat-raised-button 
-                color="primary">SAVE</button>
-      </div>
-      <md-editor name="text" 
-        [upload]="doUpload" 
-        [preRender]="preRenderFunc" 
-        [(ngModel)]="text" 
-        [height]="'1000px'" 
-        [mode]="mode" 
-        [options]="options" 
-        required 
-        maxlength="2500"
-        ngModel>
-      </md-editor>
-    </form>
-  </mat-card>
-  `,
+  templateUrl:'content-editor.component.html',
   styleUrls: ['./content-editor.component.css']
 })
 export class ContentEditorComponent implements OnInit {
@@ -39,17 +18,21 @@ export class ContentEditorComponent implements OnInit {
     title: '',
     name: '',
     text: '',
-    tags: 'test, test',
-    categories: 'Product Reviews, good offers'
+    tags: '',
+    categories: ''
   }
   
   private formErrors: string = ''
 
   constructor(private authenticaionService: AuthenticationService,
               private blogDataService: BlogDataService,
-              private route: Router) { }
+              private router: Router,
+              private activatedRoute: ActivatedRoute,
+              public dialog: MatDialog,
+              private sharedService: SharedService) { }
 
   onSubmit(formData: any): void {
+    this.post.categories = this.activatedRoute.snapshot.params.categoryid
     this.post.name = this.authenticaionService.getCurrentUser().name
     this.post.title = formData.title
     this.post.text = formData.text
@@ -59,7 +42,7 @@ export class ContentEditorComponent implements OnInit {
     if (this.formIsValid()) {
       this.blogDataService.addArticle(this.post)
         .then((article: Article)=> {
-          this.route.navigateByUrl(`/blog/${article._id}`)
+          this.router.navigateByUrl(`/blog/${article._id}`)
           // console.log(JSON.stringify(article))
         })
         .catch((message)=> this.formErrors = message)
@@ -76,6 +59,67 @@ export class ContentEditorComponent implements OnInit {
     }
   }
 
+  openDialog(formData: any) {
+    this.post.categories = this.activatedRoute.snapshot.params.categoryid
+    this.post.name = this.authenticaionService.getCurrentUser().name
+    this.post.title = formData.title
+    this.post.text = formData.text
+    console.log(this.post)
+
+    this.formErrors = ''
+    if (this.formIsValid()) {
+      const dialogRef = this.dialog.open(BlogPostDialog, {
+        width: '450px',
+        data: this.post
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed')
+        console.log(JSON.stringify(result))
+        if (result !== undefined) {
+          this.blogDataService.addArticle(this.post)
+              .then((article: Article)=> {
+              // this.router.navigateByUrl(`/blog/${article._id}`)
+              console.log(JSON.stringify(article))
+              this.sharedService.setMode("read")
+            })
+            .catch((message)=> this.formErrors = message)
+        }
+      });
+
+    } else {
+      this.formErrors = 'All fields required, please try again'
+    }
+  }
+
   ngOnInit() {
   }
+}
+
+@Component({
+  selector: 'blog-post-dialog',
+  templateUrl: 'blog-post-dialog.html',
+})
+export class BlogPostDialog implements OnInit{
+  categories$: Observable<Category[]>
+  // categories: Category[]
+  constructor(
+    public dialogRef: MatDialogRef<BlogPostDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: Article,
+    private blogDataService: BlogDataService) {}
+
+  ngOnInit(): void {
+    this.categories$ = this.blogDataService.getCategories("blog", false, true)
+    console.log(this.data)
+
+    // this.blogDataService.getCategories("blog", false, true).subscribe(result=> {
+    //   this.categories = result
+    //   console.log(this.categories)
+    // })
+  }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
 }

@@ -1,7 +1,7 @@
 <div fxLayout="column" fxLayoutGap="20px">
   <mat-sidenav-container>
     <mat-sidenav #sidenav>
-      <app-side-nav [appStatus]="appstatus | lowercase" [categories]="categories$ | async"></app-side-nav>
+      <app-side-nav [appStatus]="appstatus | lowercase" [categories]="categories"></app-side-nav>
     </mat-sidenav>
     <mat-sidenav-content>
       <mat-toolbar class="toolbar">
@@ -9,15 +9,19 @@
           <button mat-icon-button (click)="toggleSidebar(sidenav)">
             <mat-icon>search</mat-icon>
           </button>
-          <span>Product Review</span>
+          <span *ngIf="activeCategory; else default">{{ activeCategory.name }}</span>
+          <ng-template #default>
+            <span>All Categories</span>
+          </ng-template>
           <span fxFlex="100%"></span>
           <span>{{appstatus}}</span>
         </mat-toolbar-row>
       </mat-toolbar>
       <div class="container">
         <app-post-list [articleList]="articlelist$ | async"></app-post-list>
-        <!-- <app-content-viewer></app-content-viewer> -->
+        <!-- mode가 변화되어도 outlet은 살아있어야 한다. -->
         <router-outlet></router-outlet>
+        <app-content-editor *ngIf="getMode() == 'write'"></app-content-editor>
       </div>
     </mat-sidenav-content>
   </mat-sidenav-container>

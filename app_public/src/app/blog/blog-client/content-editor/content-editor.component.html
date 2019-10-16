@@ -1,0 +1,25 @@
+<mat-card>
+  <form #f="ngForm" (ngSubmit)="openDialog(f.value)">
+    <div role="alert" class="alert alert-danger" *ngIf="formErrors">{{formErrors}}</div>
+    <div fxLayout="row" fxLayoutAlign="space-between">
+      <mat-form-field class="title">
+        <input matInput placeholder="Title" name="title" ngModel>
+      </mat-form-field>
+      <button class="save_button" 
+              mat-raised-button 
+              color="primary"
+              >SAVE</button>
+    </div>
+    <md-editor name="text" 
+      [upload]="doUpload" 
+      [preRender]="preRenderFunc" 
+      [(ngModel)]="text" 
+      [height]="'1000px'" 
+      [mode]="mode" 
+      [options]="options" 
+      required 
+      maxlength="2500"
+      ngModel>
+    </md-editor>
+  </form>
+</mat-card>

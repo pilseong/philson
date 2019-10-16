@@ -1,26 +1,29 @@
-import { Component, OnInit, EventEmitter, ViewChild, Output, OnDestroy, ErrorHandler } from '@angular/core';
+import { Component, OnInit, EventEmitter, ViewChild, Output, OnDestroy, ErrorHandler, ElementRef } from '@angular/core';
 import { Category, ArticleList, Article } from 'src/app/shared/types/article';
 import { BlogDataService } from 'src/app/shared/services/blog-data.service';
 import { Subscription, EMPTY, Observable } from 'rxjs';
 import { Router, NavigationEnd, RouterEvent, ActivatedRoute, Route } from '@angular/router';
 import { filter, switchMap, map } from 'rxjs/operators';
 import { MatSidenav } from '@angular/material';
+import { SharedService } from '../shared/services/shared.service';
 
 @Component({
   selector: 'app-framework',
   templateUrl: './framework.component.html',
-  styleUrls: ['./framework.component.css']
+  styleUrls: ['./framework.component.css'],
 })
 export class FrameworkComponent implements OnInit, OnDestroy {
-
+  activeCategory: Category
   categories: Category[] = []
   articlelist$: Observable<ArticleList[]>
   constructor(private blogDataService: BlogDataService,
               private activatedRoute: ActivatedRoute,
-              private route: Router) { }
+              private sharedService: SharedService,
+              private route: Router) { 
+  }
 
   appstatus: string    // which type of app
-  categories$: Observable<Category[]>
+  // categories$: Observable<Category[]>
   categoriesSubscription: Subscription              
 
   article$: Observable<Article>
@@ -30,27 +33,20 @@ export class FrameworkComponent implements OnInit, OnDestroy {
   subscription: Subscription
 
   ngOnInit() {
-    this.categories$ = this.getCategories("blog")
-
-    // this.articlelist$ = this.route.events.pipe(
-    //   filter(event=> event instanceof NavigationEnd),
-    //   switchMap((event: RouterEvent)=> {
-    //     console.log("framework oninit: " + event )
-    //     return EMPTY
-    //   })
-    // )
-    this.article$ = this.activatedRoute.params.pipe(
-      switchMap(({ articleid })=> {
-        console.log("framework oninit2: " +  articleid)
-        if (articleid !== null && articleid !== undefined && articleid !== '')
-          return this.blogDataService.getArticleById(articleid)
-        else
-          return EMPTY
-      })
-    )
+    this.getCategories("blog").subscribe(categories=> {
+      this.categories = categories;
+      this.sharedService.setCategories(categories)
+    })
 
     this.articlelist$ = this.activatedRoute.params.pipe(
       switchMap(({ categoryid, articleid })=> {
+        console.log("framework change route " + this.sharedService.getMode())
+        if (categoryid === 'all') {
+          this.activeCategory = undefined
+        } else {
+          this.activeCategory = this.sharedService.setActiveCategory(categoryid)
+          console.log(this.activeCategory)
+        }
         console.log("framework oninit1: " + categoryid + " " + articleid )
         if (categoryid !== null && categoryid !== undefined && categoryid !== '')
           return this.blogDataService.getArticleListByCategory(categoryid)
@@ -58,53 +54,10 @@ export class FrameworkComponent implements OnInit, OnDestroy {
           return EMPTY
       })
     )
+  }
 
-
-    // this.article$ = this.blogDataService.getArticleById('')
-
-
-
-    // this.subscription = this.route.events.pipe(
-    //   filter(event=> event instanceof NavigationEnd),
-    //   switchMap((event: RouterEvent)=> {
-    //     console.log("original: " + event.url)
-    //     const target = (event.url === '/') ? 'blog' : event.url.slice(event.url.indexOf('/blog', 0)+6)
-    //     console.log("after: " + target)
-    //     this.blogDataService.getArticleList(target)
-    //       .then((response: ArticleList[])=> {
-    //         this.articlelist = response
-    //       })
-    //       .catch(this.handleError)
-    //       return EMPTY
-        // console.log("frame route change")
-        // console.log("iner: " + event.url)
-        // this.blogDataService.getCategories(event.url)
-        //   .then((categories: Category[])=>{
-        //     if (this.firstCategory === undefined) {
-        //       this.categories = categories
-        //       this.categories.forEach((category: Category)=> {
-        //         if (category.order === 1) {
-        //           this.firstCategory = category
-        //           category.children.forEach(element => {
-        //             if (element.order === 1)
-        //               this.secondCategory = element
-        //           });
-        //         }
-                
-        //       })
-        //     } else {
-        //       this.
-        //     }
-        //     this.blogDataService.getArticleList(this.secondCategory)
-        //     .then((response: ArticleList[])=> {
-        //       this.articlelist = response
-        //     })        
-        //   })
-        // .catch(this.handleError)   
-    //   })
-    // ).subscribe(result=>{
-    //   console.log("outer:" + result)
-    // })
+  public changeMode(event) {
+      console.log(event)
   }
 
   private getCategories(category: string): Observable<Category[]> {
@@ -114,9 +67,12 @@ export class FrameworkComponent implements OnInit, OnDestroy {
     //                   ? category.split('/')[1] : 'blog'
     this.appstatus = category.toUpperCase()
     console.log(this.appstatus)    
-    return this.blogDataService.getCategories(category)
+    return this.blogDataService.getCategories(category, true, false)
   }
 
+  getMode(): string {
+    return this.sharedService.getMode()
+  }
 
   toggleSidebar(menu: MatSidenav) {
       menu.toggle()

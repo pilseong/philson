@@ -1,8 +1,26 @@
-<mat-card>
+<!-- mode가 변화되어도 outlet은 살아있어야 한다. -->
+<mat-card *ngIf="getMode() == 'read'">
   <div class="mat-typography" fxLayout="column">
     <div fxLayout="row" fxLayoutAlign="space-between">
-      <span class="mat-title">{{ pageContent.categories }}</span>
-      <a routerLink="/blog/new" mat-raised-button class="new_button" color="primary">New</a>
+      <span class="mat-title" *ngIf="category">
+        <mat-chip-list aria-label="category name">
+          <mat-chip color="primary" selected>{{ category.name }}</mat-chip> 
+        </mat-chip-list>      
+        </span>
+      <span>
+      <a mat-raised-button class="new_button" 
+        color="primary" 
+        *ngIf="isLoggedIn()"
+        (click)="delete()">Delete</a>
+      <a mat-raised-button class="new_button" 
+        color="primary" 
+        *ngIf="isLoggedIn()"
+        (click)="toggleMode()">Edit</a>
+      <a mat-raised-button class="new_button" 
+        color="primary" 
+        *ngIf="isLoggedIn()"
+        (click)="toggleMode()">New</a>        
+      </span>
     </div>        
     <span class="mat-headline">{{ pageContent.title }}</span>
     <div>

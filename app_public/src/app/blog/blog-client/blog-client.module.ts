@@ -5,11 +5,12 @@ import { Routes, RouterModule } from '@angular/router';
 import { MaterialModule } from 'src/app/shared/material/material.module';
 import { PostListComponent } from './post-list/post-list.component';
 import { ContentViewerComponent } from './content-viewer/content-viewer.component';
-import { ContentEditorComponent } from './content-editor/content-editor.component';
+import { ContentEditorComponent, BlogPostDialog } from './content-editor/content-editor.component';
 import { FormsModule } from '@angular/forms';
 import { LMarkdownEditorModule } from 'ngx-markdown-editor';
 import { MarkdownModule } from 'ngx-markdown';
 import { SideNavModule } from 'src/app/shared/side-nav/side-nav.module';
+import { SharedService } from './shared/services/shared.service';
 
 const routes: Routes = [
   // { path: '', component: FrameworkComponent }
@@ -21,7 +22,10 @@ const routes: Routes = [
       { path: '', pathMatch: 'full', component: ContentViewerComponent },
       { path: ':articleid', pathMatch: 'full', component: ContentViewerComponent },
     ]},
-  ]}
+  ]},
+  // { path: 'blog/new', component: FrameworkComponent , children: [
+  //   { path: '', pathMatch: 'full', component: ContentEditorComponent }
+  // ]}
 
   // { path: ':categoriId', pathMatch: 'full', component: ContentViewerComponent },
   // { path: 'new', pathMatch: 'full', component: ContentEditorComponent },
@@ -38,7 +42,8 @@ const routes: Routes = [
     FrameworkComponent, 
     PostListComponent, 
     ContentViewerComponent, 
-    ContentEditorComponent
+    ContentEditorComponent,
+    BlogPostDialog
   ],
   imports: [
     CommonModule,
@@ -48,6 +53,12 @@ const routes: Routes = [
     SideNavModule,
     MarkdownModule.forChild(),
     RouterModule.forChild(routes)
+  ],
+  providers: [
+    SharedService,
+  ],
+  entryComponents: [
+    BlogPostDialog
   ]
 })
 export class BlogClientModule { }

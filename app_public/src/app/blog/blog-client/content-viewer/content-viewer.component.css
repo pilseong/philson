@@ -3,5 +3,7 @@ mat-card {
 }
 
 .new_button {
-  height: 2.5rem;
+  height: 2.0rem;
+  margin-left: 1px;
+  line-height: 2rem;
 }

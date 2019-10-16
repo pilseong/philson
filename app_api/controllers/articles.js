@@ -5,7 +5,9 @@ const Category  = mongoose.model('Category')
 const listCategores = function(req, res, next) {
   console.log("listCategores : " + JSON.stringify(req.query))
 
+  // 필터 설정부분. 이름이 있는 경우는 
   const name = req.query.name ? { name: { $in: req.query.name.split(',') } } : {};
+  // 자식이 있는 카테고리만 가져온다.
   const children = req.query.children === 'true' ? { children: { $exists : true } } : {}
 
   console.log(children)
@@ -36,12 +38,17 @@ const listCategores = function(req, res, next) {
     })
 }
 
+// 사용되고 있는 함수
 const listCategoresById = function(req, res, next) {
   console.log("Server Entry --- listCategoresById: " + req.params.appid)
-  const children  = req.query.children === 'true' ? { children: { $exists : true } } : {}
+  // 최하위 카테고리를 가져온다. 자식이 없고 부모가 있는 카테고리를 가져온다.
+  const children  = req.query.children === 'true' ? { parent: { $exists : true }, children: { $exists : false } } : {}
+  // 최상위 카테고리를 가져온다. 부모가 없는 카테고리만 가져오도록 한다.
   const parent    = req.query.parent === 'true' ? { parent: { $exists : false } } : {}
 
   console.log(parent)
+  console.log(children)
+  // blog는 블로그의 카테고리를 의미한다.
   if (req.params.appid === 'blog') {
     Category
       .find({ ...children, ...parent })
@@ -59,6 +66,7 @@ const listCategoresById = function(req, res, next) {
             .status(404)
             .json(err)
         }
+        console.log(results)
         res
         .status(200)
         .json(results)
